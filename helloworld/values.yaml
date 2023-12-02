@@ -1,0 +1,7 @@
+appName: helloworld
+
+namespace: default
+
+image:
+  name: 192.168.4.190:8444/helloworld
+  tag: latest
