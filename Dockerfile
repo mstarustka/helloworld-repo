@@ -1,0 +1,1 @@
+FROM mstarustka/helloworld:latest
