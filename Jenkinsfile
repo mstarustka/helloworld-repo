@@ -5,6 +5,8 @@ pipeline {
     agent any
     environment {
         registry = "192.168.4.190:8444/repository/docker-private-repo"
+	dockerimagename = "mstarustka/helloworld"
+	dockerImage = ""
     }
    
     stages {
