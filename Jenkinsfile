@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                git 'https://github.com/mstarustka/helloworld-repo.git'
+                git branch: 'main', url: 'https://github.com/mstarustka/helloworld-repo.git'
             }
         }
       stage ('Build') {
