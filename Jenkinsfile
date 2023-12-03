@@ -22,8 +22,8 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build registry 
-          dockerImage.tag("$BUILD_NUMBER")
+          dockerImage = docker.build helloworld 
+          dockerImage.tag("latest")
         }
       }
     }
@@ -33,14 +33,14 @@ pipeline {
      steps{  
          script {
                 sh 'docker login 192.168.4.190:8444 --username admin --password=Counterstr1ke'
-                sh 'docker push 192.168.4.190:8444/helloworld:$BUILD_NUMBER'
+                sh 'docker push 192.168.4.190:8444/helloworld:latest'
          }
         }
       }
         stage ('Helm Deploy') {
           steps {
             script {
-                sh "helm upgrade first --install helloworld-release-dev helloworld/ --values helloworld/values.yaml -f helloworld/values-dev.yaml --namespace dev --set image.tag=$BUILD_NUMBER"
+                sh "helm upgrade first --install helloworld-release-dev helloworld/ --values helloworld/values.yaml -f helloworld/values-dev.yaml --namespace dev --set image.tag=latest"
                 }
             }
         }
