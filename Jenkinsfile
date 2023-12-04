@@ -23,7 +23,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build helloworld 
+          dockerImage = docker.build dockerimagename
           dockerImage.tag("latest")
         }
       }
