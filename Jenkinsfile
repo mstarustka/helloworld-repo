@@ -1,7 +1,6 @@
 pipeline {
     tools {
     maven 'Maven3'
-    docker 'Docker'
       }
     environment {
         registry = "192.168.4.190:8444/repository/docker-private-repo"
@@ -24,6 +23,8 @@ pipeline {
     stage('Building image') {
       steps{
         script {
+	  def dockerHome = tool 'docker'
+	  env.PATH = "${dockerHome}/bin:${env.PATH}"
           dockerImage = docker.build dockerimagename
           dockerImage.tag("latest")
         }
