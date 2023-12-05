@@ -1,6 +1,7 @@
 pipeline {
     tools {
     maven 'Maven3'
+    docker 'Docker'
       }
     environment {
         registry = "192.168.4.190:8444/repository/docker-private-repo"
