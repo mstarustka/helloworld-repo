@@ -7,7 +7,7 @@ pipeline {
 	dockerimagename = "mstarustka/helloworld"
 	dockerImage = ""
     }
-    agent any
+    agent docker
     stages {
         stage('Cloning Git') {
             steps {
