@@ -7,19 +7,22 @@ pipeline {
 	dockerimagename = "mstarustka/helloworld"
 	dockerImage = ""
     }
-    agent docker
+    agent any
     stages {
         stage('Cloning Git') {
             steps {
                 git branch: 'main', url: 'https://github.com/mstarustka/helloworld-repo.git'
             }
         }
-      stage ('Build') {
-          steps {
-            sh 'mvn clean install'           
+        stage ('Build') {
+            steps {
+                sh 'mvn clean install'           
             }
-      }
+        }
     // Building Docker images
+    }
+    agent { docker }
+    stages {
     stage('Building image') {
       steps{
         script {
@@ -28,7 +31,6 @@ pipeline {
         }
       }
     }
-   
     // Uploading Docker images into NEXUS Repository
     stage('Pushing to Nexus') {
      steps{  
