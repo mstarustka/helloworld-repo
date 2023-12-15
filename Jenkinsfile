@@ -1,13 +1,19 @@
 pipeline {
     tools {
-    maven 'Maven3'
-      }
+        maven 'Maven3'
+    }
     environment {
         registry = "192.168.4.190:8444/repository/docker-private-repo"
-	dockerimagename = "mstarustka/helloworld"
-	dockerImage = ""
+	      dockerimagename = "mstarustka/helloworld"
+	      dockerImage = ""
     }
-    agent any
+    
+    agent {
+        docker {
+            image 'docker:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
     stages {
         stage('Cloning Git') {
             steps {
@@ -19,33 +25,33 @@ pipeline {
                 sh 'mvn clean install'           
             }
         }
-    // Building Docker images
-    }
-    agent { docker }
-    stages {
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build dockerimagename
-          dockerImage.tag("latest")
+        stage ('Test') {
+            steps {
+                sh 'node --version'
+            }
         }
-      }
-    }
-    // Uploading Docker images into NEXUS Repository
-    stage('Pushing to Nexus') {
-     steps{  
-         script {
-                sh 'docker login 192.168.4.190:8444 --username admin --password=Counterstr1ke'
-                sh 'docker push 192.168.4.190:8444/helloworld:latest'
-         }
+        stage('Building image') {
+            steps {
+              script {
+                dockerImage = docker.build dockerimagename
+                dockerImage.tag("latest")
+              }
+            }
         }
-      }
-        stage ('Helm Deploy') {
-          steps {
-            script {
-                sh "helm upgrade first --install helloworld-release-dev helloworld/ --values helloworld/values.yaml -f helloworld/values-dev.yaml --namespace dev --set image.tag=latest"
+        stage('Pushing to Nexus') {
+            steps{  
+                script {
+                    sh 'docker login 192.168.4.190:8444 --username admin --password=Counterstr1ke'
+                    sh 'docker push 192.168.4.190:8444/helloworld:latest'
                 }
             }
         }
-    }
+        stage ('Helm Deploy') {
+            steps {
+                script {
+                    sh "helm upgrade first --install helloworld-release-dev helloworld/ --values helloworld/values.yaml -f helloworld/values-dev.yaml --namespace dev --set image.tag=latest"
+                }
+            }
+        }
+    }    
 }
