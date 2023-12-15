@@ -3,6 +3,7 @@ pipeline {
         maven 'Maven3'
     }
     environment {
+        PATH = "$PATH:/usr/local/bin"
         registry = "192.168.4.190:8444/repository/docker-private-repo"
 	      dockerimagename = "mstarustka/helloworld"
 	      dockerImage = ""
