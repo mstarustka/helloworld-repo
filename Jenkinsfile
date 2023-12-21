@@ -3,7 +3,7 @@ pipeline {
         maven 'Maven3'
     }
     
-    agent any {
+    agent {
         def remote = [:]
         remote.name = 'k8scontrol'
         remote.host = 'k8scontrol'
