@@ -69,7 +69,7 @@ pipeline {
 //            }
         }
     }
-    node {
+    agent {
         def remote = [:]
         remote.name = 'k8scontrol'
         remote.host = 'k8scontrol'
