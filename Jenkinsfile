@@ -56,8 +56,8 @@ pipeline {
             steps {
                 sshagent(credentials: ['2d7cc276-5e9e-4933-93fb-7c6f1a21a9e4']) {
                     sh '''
-                        [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
-                        ssh-keyscan -t rsa,dsa k8scontrol >> ~/.ssh/known_hosts
+                        [ -d /home/mstarustka/.ssh ] || mkdir /home/mstarustka/.ssh && chmod 0700 /home/mstarustka/.ssh
+                        ssh-keyscan -t rsa,dsa k8scontrol >> /home/mstarustka/.ssh/known_hosts
                         ssh mstarustka@k8scontrol echo "Successfully connected to k8scontrol.";scp -r /home/jenkins/workspace/eploy_Helloworld_helm_chart_main/helloworld mstarustka@k8scontrol:/proj/app/helm_deploy/
                     '''
                 }
