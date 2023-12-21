@@ -57,7 +57,7 @@ pipeline {
                 sshagent(credentials: ['2d7cc276-5e9e-4933-93fb-7c6f1a21a9e4']) {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
-                        ssh-keyscan -t rsa,dsa example.com >> ~/.ssh/known_hosts
+                        ssh-keyscan -t rsa,dsa jenkins >> ~/.ssh/known_hosts
                         ssh mstarustka@k8scontrol echo "SSH was successful"
                     '''
                 }
