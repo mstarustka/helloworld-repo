@@ -3,7 +3,17 @@ pipeline {
         maven 'Maven3'
     }
     
-    agent any
+    agent any {
+        def remote = [:]
+        remote.name = 'k8scontrol'
+        remote.host = 'k8scontrol'
+        remote.user = 'mstarustka'
+        remote.password = 'Counterstr1ke'
+        remote.allowAnyHosts = true
+        stage('Remote SSH') {
+            sshCommand remote: remote, command: "echo SSH command was successful!"
+        }
+    }
 
     environment {
         PATH = "$PATH:/usr/local/bin"
@@ -67,17 +77,6 @@ pipeline {
 //                    sh "helm upgrade first --install helloworld-release-dev helloworld/ --values helloworld/values.yaml -f helloworld/values-dev.yaml --namespace dev --set image.tag=latest"
 //                }
 //            }
-        }
-    }
-    agent {
-        def remote = [:]
-        remote.name = 'k8scontrol'
-        remote.host = 'k8scontrol'
-        remote.user = 'mstarustka'
-        remote.password = 'Counterstr1ke'
-        remote.allowAnyHosts = true
-        stage('Remote SSH') {
-            sshCommand remote: remote, command: "echo SSH command was successful!"
         }
     }         
 }
