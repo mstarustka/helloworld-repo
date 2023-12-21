@@ -56,7 +56,7 @@ pipeline {
             steps {
                 sshagent(credentials: ['2d7cc276-5e9e-4933-93fb-7c6f1a21a9e4']) {
                     sh '''
-                        ssh mstarustka@k8scontrol echo "Successfully connected to k8scontrol.";scp -r /home/jenkins/workspace/eploy_Helloworld_helm_chart_main/helloworld mstarustka@k8scontrol:/proj/app/helm_deploy/
+                        ssh mstarustka@k8scontrol echo "Successfully connected to k8scontrol.";scp -r mstarustka@jenkins:/home/jenkins/workspace/eploy_Helloworld_helm_chart_main/helloworld /proj/app/helm_deploy/
                     '''
                 }
             }
