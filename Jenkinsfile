@@ -10,12 +10,6 @@ pipeline {
         registry = "192.168.4.190:8444/repository/docker-private-repo"
 	    DOCKER_IMAGE_NAME = "192.168.4.190:8444/helloworld"
 	    dockerImage = ""
-        def remote = [:]
-        remote.name = 'k8scontrol'
-        remote.host = 'k8scontrol'
-        remote.user = 'mstarustka'
-        remote.password = 'Counterstr1ke'
-        remote.allowAnyHosts = true
     }
 
     stages {
@@ -58,9 +52,17 @@ pipeline {
                 }
             }
         }
-        stage('Remote SSH') {
-            sshCommand remote: remote, command: "echo SSH command was successful!"
-        }
+        node {
+            def remote = [:]
+            remote.name = 'k8scontrol'
+            remote.host = 'k8scontrol'
+            remote.user = 'mstarustka'
+            remote.password = 'Counterstr1ke'
+            remote.allowAnyHosts = true
+            stage('Remote SSH') {
+                sshCommand remote: remote, command: "echo SSH command was successful!"
+            }
+        }   
         stage ('Deploy Helm Chart to Kubernetes Cluster') {
             steps {
                 sshagent(credentials: ['2d7cc276-5e9e-4933-93fb-7c6f1a21a9e4']) {
