@@ -2,19 +2,16 @@ pipeline {
     tools {
         maven 'Maven3'
     }
+    
+    agent any
+
     environment {
         PATH = "$PATH:/usr/local/bin"
         registry = "192.168.4.190:8444/repository/docker-private-repo"
-	      dockerimagename = "mstarustka/helloworld"
-	      dockerImage = ""
+	    DOCKER_IMAGE_NAME = "mstarustka/helloworld"
+	    dockerImage = ""
     }
-    
-    agent {
-        docker {
-            image 'docker:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+           
     stages {
         stage('Cloning Git') {
             steps {
@@ -31,15 +28,23 @@ pipeline {
                 sh 'node --version'
             }
         }
-        stage('Building image') {
+        stage ('Pull Docker Image From Nexus') {
+            steps{  
+                script {
+                    sh 'docker login 192.168.4.190:8444 --username admin --password=Counterstr1ke'
+                    sh 'docker pull 192.168.4.190:8444/helloworld:latest'
+                }
+            }
+        }        
+        stage ('Build Docker Image') {
             steps {
-              script {
-                dockerImage = docker.build dockerimagename
-                dockerImage.tag("latest")
-              }
+                script {
+                    dockerImage = docker.build DOCKER_IMAGE_NAME
+                    dockerImage.tag("latest")
+                }
             }
         }
-        stage('Pushing to Nexus') {
+        stage ('Pushing to Nexus') {
             steps{  
                 script {
                     sh 'docker login 192.168.4.190:8444 --username admin --password=Counterstr1ke'
