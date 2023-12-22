@@ -54,7 +54,7 @@ pipeline {
         }          
         stage ('Deploy Helm Chart to Kubernetes Cluster') {
             steps {
-                sshagent(credentials: ['2d7cc276-5e9e-4933-93fb-7c6f1a21a9e4']) {
+                sshagent(credentials: ['mstarustka']) {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh-keyscan -t rsa,dsa k8scontrol >> ~/.ssh/known_hosts
