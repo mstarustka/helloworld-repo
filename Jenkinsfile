@@ -61,7 +61,7 @@ pipeline {
                         ssh jenkins@k8scontrol echo "Successfully connected to k8scontrol."
                         ssh jenkins@k8scontrol pwd
                         ssh jenkins@k8scontrol hostname
-                        ssh jenkins@k8scontrol cd /proj/app/helm_deploy; scp -r jenkins@jenkins:/home/jenkins/workspace/Deploy_Helm_Chart_main/helloworld ./
+                        ssh jenkins@k8scontrol "cd /proj/app/helm_deploy; pwd; scp -r jenkins@jenkins:/home/jenkins/workspace/Deploy_Helm_Chart_main/helloworld ./"
                     '''
                 }
             }
