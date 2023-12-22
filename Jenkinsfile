@@ -58,7 +58,7 @@ pipeline {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh-keyscan -t rsa,dsa k8scontrol >> ~/.ssh/known_hosts
-                        ssh jenkins@k8scontrol pwd echo "Successfully connected to k8scontrol."
+                        ssh jenkins@k8scontrol echo "Successfully connected to k8scontrol."; echo "Switching to mstarustka user."; /usr/bin/su mstarustka; echo "Username is now" $USER"."
                     '''
                 }
             }
