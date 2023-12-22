@@ -58,7 +58,7 @@ pipeline {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh-keyscan -t rsa,dsa k8scontrol >> ~/.ssh/known_hosts
-                        ssh jenkins@k8scontrol echo "Successfully connected to "$HOSTNAME"."; echo "Switching to mstarustka user."; sudo /usr/bin/su mstarustka; echo "Username is now" $USER"."
+                        ssh jenkins@k8scontrol echo "Successfully connected to k8scontrol."; cd /proj/app/helm_deploy; pwd; echo $HOSTNAME; scp -r jenkins@jenkins:/home/jenkins/workspace/Deploy_Helm_Chart_main/helloworld ./
                     '''
                 }
             }
