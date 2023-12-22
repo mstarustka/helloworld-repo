@@ -54,11 +54,11 @@ pipeline {
         }          
         stage ('Deploy Helm Chart to Kubernetes Cluster') {
             steps {
-                sshagent(credentials: ['mstarustka']) {
+                sshagent(credentials: ['jenkins']) {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh-keyscan -t rsa,dsa k8scontrol >> ~/.ssh/known_hosts
-                        ssh mstarustka@k8scontrol pwd echo "Successfully connected to k8scontrol."
+                        ssh jenkins@k8scontrol pwd echo "Successfully connected to k8scontrol."
                     '''
                 }
             }
