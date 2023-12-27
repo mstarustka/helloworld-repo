@@ -53,23 +53,22 @@ pipeline {
             }
         }          
         stage ('Deploy Helm Chart to Kubernetes Cluster') {
-            steps {
-                sshagent(credentials: ['jenkins']) {
-                    sh '''
-                        [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
-                        ssh-keyscan -t rsa,dsa k8scontrol >> ~/.ssh/known_hosts 
-                        ssh jenkins@k8scontrol echo "Successfully connected to k8scontrol."
-                        ssh jenkins@k8scontrol pwd
-                        ssh jenkins@k8scontrol hostname
-                        ssh jenkins@k8scontrol "cd /proj/app/helm_deploy; pwd; scp -r jenkins@jenkins:/home/jenkins/workspace/Deploy_Helm_Chart_main/helloworld ./"
-                    '''
-                }
-            }
 //            steps {
-//                script {
-//                    sh "helm upgrade first --install helloworld-release-dev helloworld/ --values helloworld/values.yaml -f helloworld/values-dev.yaml --namespace dev --set image.tag=latest"
+//                sshagent(credentials: ['jenkins']) {
+//                    sh '''
+//                        [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
+//                        ssh-keyscan -t rsa,dsa k8scontrol >> ~/.ssh/known_hosts 
+//                        ssh jenkins@k8scontrol echo "Successfully connected to k8scontrol."
+//                        ssh jenkins@k8scontrol hostname
+//                        ssh jenkins@k8scontrol "cd /proj/app/helm_deploy; pwd; scp -r jenkins@jenkins:/home/jenkins/workspace/Deploy_Helm_Chart_main/helloworld ./"
+//                    '''
 //                }
 //            }
-        }
-    }         
+            steps {
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'microk8s', contextName: '', credentialsId: 'kommander-cluster-admin-secret', namespace: '', serverUrl: 'https://192.168.4.185:16443']]) {
+                    sh 'kubectl get all -n dev'
+                    sh 'helm list -n dev'
+                }
+            }
+        }         
 }
